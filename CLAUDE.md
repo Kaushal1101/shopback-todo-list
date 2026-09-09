@@ -4,13 +4,12 @@ A simple To-Do list app built as a learning/demo project.
 
 ## Tech Stack
 
-| Layer      | Technology              |
-|------------|-------------------------|
-| Frontend   | React + Vite            |
-| Backend    | Python + FastAPI        |
-| Middleware | FastAPI CORS middleware  |
-| Database   | SQLite                  |
-| API        | REST (JSON over HTTP)   |
+| Layer    | Technology          |
+|----------|---------------------|
+| Frontend | React + Vite        |
+| Backend  | Python + FastAPI    |
+| Database | SQLite              |
+| API      | REST (JSON over HTTP)|
 
 ## Repo Layout
 
@@ -40,8 +39,7 @@ shopback-todo-list/
 
 - Frontend dev server: `npm run dev` (inside `frontend/`) — runs on port 5173
 - Backend dev server: `uvicorn main:app --reload` (inside `backend/`) — runs on port 8000
-- Frontend proxies `/api` requests to `localhost:8000` (configured in `vite.config.js`)
-- CORS is handled by FastAPI's built-in `CORSMiddleware` — allows requests from the Vite dev server origin.
+- Frontend proxies `/api` requests to `localhost:8000` (configured in `vite.config.js`) — no CORS needed.
 
 ## Coding Guardrails
 
