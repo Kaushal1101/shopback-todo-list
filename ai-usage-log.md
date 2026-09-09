@@ -1,54 +1,30 @@
 # AI Usage Log
 
-Tracks how the developer directed Claude during this project — specifically decisions, constraints, and information provided by the developer vs. delegated to AI.
+Tracks how the developer directed Claude during this project — specifically decisions and information provided by the developer vs. delegated to AI.
 
 ---
 
-## Session 1 — Project Setup
+## Developer-Driven Decisions
 
-### Prompt 1: Project Brief & Architecture Kickoff
-
-**What the developer specified:**
-- App type: To-Do list
-- Tech stack (all chosen by developer): React (frontend), Python + FastAPI (backend), SQLite (database)
-- Feature requirements: add/edit/delete tasks, mark complete, basic persistence
-- Explicit goal framing: functional over impressive — reliability over polish
-- Behavioural constraints placed on Claude:
-  - No running commands without approval
-  - Small, focused changes only
-  - Show code snippets with explanations for every change
-  - No unnecessary abstractions or dependencies
-  - No commits without approval
-- Claude's role defined as: software architect (design, component communication, engineering principles)
-
-**What was delegated to Claude:**
-- How to structure the CLAUDE.md
-- Specific file/folder layout within the stack
-- Which engineering principles to apply
+- **Tech stack** — Chose React, Python + FastAPI, and SQLite independently before engaging Claude. Claude validated and filled in gaps (Vite, CORS discussion).
+- **Goal framing** — Explicitly set the bar as functional over impressive; reliability over polish. This shaped all subsequent architectural recommendations.
+- **Behavioural constraints** — Set rules for how Claude should operate: no commands or commits without approval, small focused changes, always show code snippets with explanations.
+- **API style** — Chose REST over GraphQL when presented with options.
+- **Repo structure** — Chose monorepo (`frontend/` + `backend/`) over separate repos when presented with options.
+- **Persistence priority** — Identified persistence as the most important feature, which guided the decision to keep the FastAPI + SQLite backend rather than simplify to localStorage.
+- **Single-port via Vite proxy** — Accepted Claude's recommendation after asking about the trade-offs; approved dropping CORS middleware.
+- **Deadline field** — Independently decided to add a nullable `deadline` field to the task model, and specified that PUT should support removing it by passing `null`.
+- **Test-first planning** — Directed Claude to add a test case definition step before any code is written, to guide logic and catch edge cases early.
+- **Backend-first build order** — Decided to build and validate the backend via Postman/FastAPI docs before touching the frontend.
 
 ---
 
-### Prompt 2: API Style & Repo Layout
+## Delegated to Claude
 
-**What the developer decided (via multiple choice):**
-- API style: REST (chose over GraphQL)
-- Repo structure: Monorepo with `frontend/` and `backend/` folders (chose over separate repos)
-
-**What was delegated to Claude:**
-- Recommending the options to choose from
-- Translating decisions into the CLAUDE.md
-
----
-
-### Prompt 3: AI Usage Tracking Request
-
-**What the developer specified:**
-- Requested a dedicated doc to track AI prompting patterns
-- Clarified the purpose: to support an AI usage report
-- Specified the focus: capture developer-provided decisions and information, not just what Claude did
-
-**What was delegated to Claude:**
-- Format and structure of this log
-- Deciding what counts as a notable prompt to record
-
----
+- File and folder layout within the chosen stack
+- Recommending Vite as the React build tool
+- Explaining CORS and the Vite proxy alternative
+- Recommending SQLite over Postgres/MongoDB for this scale
+- Structuring the backend plan (`agent-plans/backend-plan.md`)
+- Writing the test cases for each endpoint
+- Documentation format and structure (CLAUDE.md, architecture-decisions.md, this file)
