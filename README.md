@@ -64,3 +64,13 @@ pytest test_main.py -v
 cd frontend
 npm run test
 ```
+
+---
+
+## Project Documents
+
+| Document | Path |
+|----------|------|
+| AI prompting log | `prompt.md` |
+| AI usage reflection | `reflection.md` |
+| App screenshots | `media/` |
