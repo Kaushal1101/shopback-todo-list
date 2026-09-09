@@ -16,7 +16,7 @@ A record of key architectural choices made during this project and the reasoning
 - The frontend code is identical either way (`fetch('/api/tasks')` works the same). No added complexity.
 - For a minimal local app with no external clients (no mobile app, no third-party consumers), there is no benefit to exposing the backend on a separate accessible port.
 
-**Trade-off:** The proxy only works while the Vite dev server is running. This is a non-issue for local development but means the backend cannot be accessed directly from a browser during development without running on a separate port. If external API access were needed, we'd switch back to separate ports + CORS.
+**Trade-off:** The proxy only works while the Vite dev server is running. The backend still runs independently on `localhost:8000` — including `/docs` — so direct API access is always available during development. The proxy purely eliminates the need for CORS headers on browser requests originating from the frontend. If external clients (mobile, third-party) needed to hit the API, no additional changes would be required.
 
 **Configured in:** `frontend/vite.config.js`
 ```js

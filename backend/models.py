@@ -1,6 +1,6 @@
 from typing import Optional
 from datetime import date
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, model_validator
 
 
 class TaskCreate(BaseModel):
@@ -54,6 +54,14 @@ class TaskUpdate(BaseModel):
         except ValueError:
             raise ValueError("deadline must be a valid date in YYYY-MM-DD format")
         return v
+
+    @model_validator(mode="after")
+    def non_nullable_fields_cannot_be_null(self):
+        if "title" in self.model_fields_set and self.title is None:
+            raise ValueError("title cannot be null")
+        if "completed" in self.model_fields_set and self.completed is None:
+            raise ValueError("completed cannot be null")
+        return self
 
 
 class TaskResponse(BaseModel):

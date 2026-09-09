@@ -23,7 +23,8 @@ def init_db():
 def get_db():
     # FastAPI runs sync route handlers in a thread pool, so the connection may be
     # used in a different thread than the one that created it. check_same_thread=False
-    # allows this. Safe here because we have no concurrent writes.
+    # allows this. Concurrent writes are possible but unlikely for a local single-user
+    # app — worst case is a transient "database is locked" error, not data corruption.
     conn = sqlite3.connect("todos.db", check_same_thread=False)
     conn.row_factory = sqlite3.Row
     try:

@@ -150,15 +150,42 @@ def test_create_task_special_chars_only_returns_422():
     response = client.post("/api/tasks", json={"title": "!@#$%^"})
     assert response.status_code == 422
 
+# title and completed are NOT NULL in the DB. Null values must be rejected
+# by Pydantic with a 422 — not silently written and caught later by SQLite as a 500.
+def test_put_null_title_returns_422():
+    task = client.post("/api/tasks", json={"title": "Buy milk"}).json()
+    response = client.put(f"/api/tasks/{task['id']}", json={"title": None})
+    assert response.status_code == 422
+
+def test_put_null_completed_returns_422():
+    task = client.post("/api/tasks", json={"title": "Buy milk"}).json()
+    response = client.put(f"/api/tasks/{task['id']}", json={"completed": None})
+    assert response.status_code == 422
+
 def test_put_special_chars_only_title_returns_422():
     task = client.post("/api/tasks", json={"title": "Buy milk"}).json()
     response = client.put(f"/api/tasks/{task['id']}", json={"title": "!@#$%^"})
     assert response.status_code == 422
 
 
-# --- 7. Title length limit (address later) ---
+# --- 7. Disk persistence ---
+# Verifies the core persistence requirement: data written to a file-based SQLite
+# database survives closing and reopening the connection (simulating a server restart).
 
-@pytest.mark.skip(reason="Length limits not yet implemented")
-def test_create_task_title_too_long():
-    response = client.post("/api/tasks", json={"title": "x" * 300})
-    assert response.status_code == 422
+def test_data_persists_across_connections(tmp_path):
+    db_path = str(tmp_path / "test.db")
+
+    conn1 = sqlite3.connect(db_path, check_same_thread=False)
+    conn1.row_factory = sqlite3.Row
+    create_tables(conn1)
+    conn1.execute("INSERT INTO tasks (title, completed, deadline) VALUES (?, ?, ?)", ("Persistent task", False, None))
+    conn1.commit()
+    conn1.close()
+
+    conn2 = sqlite3.connect(db_path, check_same_thread=False)
+    conn2.row_factory = sqlite3.Row
+    rows = conn2.execute("SELECT * FROM tasks").fetchall()
+    conn2.close()
+
+    assert len(rows) == 1
+    assert rows[0]["title"] == "Persistent task"
