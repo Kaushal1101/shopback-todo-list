@@ -142,6 +142,19 @@ def test_create_task_empty_title_returns_422():
     response = client.post("/api/tasks", json={"title": ""})
     assert response.status_code == 422
 
+def test_create_task_whitespace_only_title_returns_422():
+    response = client.post("/api/tasks", json={"title": "   "})
+    assert response.status_code == 422
+
+def test_create_task_special_chars_only_returns_422():
+    response = client.post("/api/tasks", json={"title": "!@#$%^"})
+    assert response.status_code == 422
+
+def test_put_special_chars_only_title_returns_422():
+    task = client.post("/api/tasks", json={"title": "Buy milk"}).json()
+    response = client.put(f"/api/tasks/{task['id']}", json={"title": "!@#$%^"})
+    assert response.status_code == 422
+
 
 # --- 7. Title length limit (address later) ---
 
