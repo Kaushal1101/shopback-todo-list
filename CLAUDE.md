@@ -19,8 +19,9 @@ shopback-todo-list/
 │   └── src/
 └── backend/         # FastAPI app
     ├── main.py      # App entry point + routes
-    ├── database.py  # SQLite connection + schema
-    └── models.py    # Pydantic models
+    ├── database.py  # SQLite connection, schema, init
+    ├── models.py    # Pydantic models
+    └── test_main.py # pytest test suite
 ```
 
 ## Features

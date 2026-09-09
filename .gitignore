@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Database
+backend/todos.db
+
+# Node
+node_modules/
+dist/

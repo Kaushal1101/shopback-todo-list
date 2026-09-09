@@ -1,12 +1,12 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, HTTPException
-from database import get_db, create_tables
+from database import get_db, init_db
 from models import TaskCreate, TaskUpdate, TaskResponse
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    create_tables(next(get_db()))
+    init_db()
     yield
 
 
