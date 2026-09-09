@@ -15,7 +15,7 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get("/api/tasks", response_model=list[TaskResponse])
 def get_tasks(db=Depends(get_db)):
-    rows = db.execute("SELECT * FROM tasks").fetchall()
+    rows = db.execute("SELECT * FROM tasks ORDER BY id").fetchall()
     return [dict(row) for row in rows]
 
 
