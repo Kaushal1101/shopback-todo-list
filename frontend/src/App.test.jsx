@@ -45,7 +45,9 @@ describe('Rendering', () => {
     api.getTasks.mockResolvedValue([mockTasks[0]])
     render(<App />)
     await screen.findByText('Buy milk')
-    expect(screen.queryByText(/deadline/i)).not.toBeInTheDocument()
+    // Check for "Due:" which only appears in TaskItem when a deadline is set.
+    // Cannot check for "Deadline" since the form always shows that label.
+    expect(screen.queryByText(/due:/i)).not.toBeInTheDocument()
   })
 })
 
@@ -235,7 +237,7 @@ describe('Error handling', () => {
   test('shows an error message when tasks fail to load', async () => {
     api.getTasks.mockRejectedValue(new Error('Network error'))
     render(<App />)
-    expect(await screen.findByText(/something went wrong/i)).toBeInTheDocument()
+    expect(await screen.findByText(/network error/i)).toBeInTheDocument()
   })
 
   test('shows an error when creating a task fails', async () => {
@@ -245,7 +247,7 @@ describe('Error handling', () => {
     await userEvent.type(screen.getByPlaceholderText(/task title/i), 'New task')
     await userEvent.click(screen.getByRole('button', { name: /add/i }))
 
-    expect(await screen.findByText(/something went wrong/i)).toBeInTheDocument()
+    expect(await screen.findByText(/network error/i)).toBeInTheDocument()
   })
 
   test('shows an error when deleting a task fails', async () => {
@@ -256,6 +258,6 @@ describe('Error handling', () => {
     await screen.findByText('Buy milk')
     await userEvent.click(screen.getByRole('button', { name: /delete/i }))
 
-    expect(await screen.findByText(/something went wrong/i)).toBeInTheDocument()
+    expect(await screen.findByText(/network error/i)).toBeInTheDocument()
   })
 })

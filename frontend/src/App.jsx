@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     getTasks()
       .then(setTasks)
-      .catch(() => setError('Something went wrong loading tasks.'))
+      .catch(e => setError(e.message))
   }, [])
 
   async function handleCreate(fields) {
