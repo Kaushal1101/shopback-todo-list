@@ -20,8 +20,8 @@ function App() {
       const newTask = await createTask(fields)
       setTasks(prev => [...prev, newTask])
       setError(null)
-    } catch {
-      setError('Something went wrong.')
+    } catch (e) {
+      setError(e.message)
     }
   }
 
@@ -31,8 +31,8 @@ function App() {
       setTasks(prev => prev.map(t => t.id === updated.id ? updated : t))
       setEditingTask(null)
       setError(null)
-    } catch {
-      setError('Something went wrong.')
+    } catch (e) {
+      setError(e.message)
     }
   }
 
@@ -41,8 +41,8 @@ function App() {
       const updated = await updateTask(task.id, { completed: !task.completed })
       setTasks(prev => prev.map(t => t.id === updated.id ? updated : t))
       setError(null)
-    } catch {
-      setError('Something went wrong.')
+    } catch (e) {
+      setError(e.message)
     }
   }
 
@@ -51,8 +51,8 @@ function App() {
       await deleteTask(id)
       setTasks(prev => prev.filter(t => t.id !== id))
       setError(null)
-    } catch {
-      setError('Something went wrong.')
+    } catch (e) {
+      setError(e.message)
     }
   }
 
