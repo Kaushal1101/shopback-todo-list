@@ -19,11 +19,10 @@ Tracks how the developer directed Claude during this project — specifically de
 - **Schema ownership in tests** — Questioned why the test fixture was duplicating the `CREATE TABLE` SQL rather than importing it from `database.py`. Led to `create_tables(conn)` being importable and reused in tests.
 - **Title validation rules** — Independently decided to reject titles made of only special characters, not just empty/whitespace titles.
 - **Manual validation step** — Chose to validate all endpoints via FastAPI docs (`/docs`) before moving to the frontend.
-
----
-
 - **Frontend test-first** — Directed Claude to write the frontend test suite before any component code was written, consistent with the backend approach.
 - **Error message clarity** — Noticed that submitting a title of only special characters showed a generic "something went wrong" message. Directed Claude to surface the actual backend validation message from FastAPI's response body.
+- **Suggestion triage** — Reviewed all Codex and reviewer suggestions independently and decided which to fix vs ignore. Dismissed loading state, contract testing, and error parser brittleness as out of scope for a single-user local app, with explicit reasoning for each.
+- **Reflection content** — Identified which AI errors were strongest to highlight, directed edits to specific sections, and verified accuracy before committing.
 
 ---
 
@@ -40,3 +39,4 @@ Tracks how the developer directed Claude during this project — specifically de
 - Writing the frontend test suite (Vitest + React Testing Library)
 - All React component implementation (App.jsx, TaskForm.jsx, TaskList.jsx, TaskItem.jsx, api.js)
 - Identifying and fixing Codex-flagged issues (form clears on error, stale edit form after delete, empty catch block, useEffect for form population, missing aria-label)
+- ADR-3, api.js brittleness comment, and README updates during finalisation
