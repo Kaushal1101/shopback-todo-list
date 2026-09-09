@@ -41,3 +41,19 @@ server: {
 - All data-fetching and mutation logic living in one file (`App.jsx`) makes the data flow easy to follow end-to-end.
 
 **Trade-off:** If the app grows significantly — more pages, deeper component nesting, or state shared across sibling trees — this approach will become unwieldy and a state library would be the right call.
+
+---
+
+## ADR-3: Frontend tests mock the API — no end-to-end or contract tests
+
+**Decision:** Frontend tests use `vi.mock('./api')` to replace all API calls with fakes. No end-to-end tests (Playwright/Cypress) and no contract tests (Pact) were written.
+
+**Context:** Mocked tests verify that React components behave correctly given certain inputs, but they never make a real HTTP request. If the backend changed its response shape (e.g. renamed a field), the frontend tests would still pass because they talk to a mock that returns whatever the test tells it to.
+
+**Why this is the right tradeoff for this project:**
+- There is a single developer who owns both the frontend and backend, so uncoordinated contract drift is not a realistic risk.
+- The API was manually validated via FastAPI's `/docs` before the frontend was built, giving confidence that the real contract matched expectations.
+- The API has only 4 endpoints and has been stable since it was written.
+- End-to-end testing tools (Playwright, Cypress) and contract testing tools (Pact) would add meaningful setup overhead that isn't justified at this scale.
+
+**When this decision should be revisited:** If multiple developers work on the codebase independently, or if the API surface grows significantly, a lightweight smoke test hitting the real backend — or a proper contract testing tool — would be the right next step.

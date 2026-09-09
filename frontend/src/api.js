@@ -3,7 +3,9 @@ const BASE = '/api/tasks'
 async function parseError(res) {
   const body = await res.json().catch(() => ({}))
   if (Array.isArray(body.detail)) {
-    // Pydantic validation error — strip the "Value error, " prefix it adds
+    // Pydantic validation error — strip the "Value error, " prefix it adds.
+    // This couples us to Pydantic's error format; a production API would return
+    // stable error codes instead. Fine for a single-consumer local app.
     return body.detail[0].msg.replace('Value error, ', '')
   }
   if (typeof body.detail === 'string') return body.detail
