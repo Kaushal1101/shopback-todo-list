@@ -1,39 +1,35 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 function TaskForm({ onSubmit, editingTask, onCancel }) {
-  const [title, setTitle] = useState('')
-  const [deadline, setDeadline] = useState('')
+  const [title, setTitle] = useState(editingTask?.title ?? '')
+  const [deadline, setDeadline] = useState(editingTask?.deadline ?? '')
 
-  // When editingTask changes, populate the form with its values.
-  useEffect(() => {
-    if (editingTask) {
-      setTitle(editingTask.title)
-      setDeadline(editingTask.deadline ?? '')
-    } else {
-      setTitle('')
-      setDeadline('')
-    }
-  }, [editingTask])
-
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     if (!title.trim()) return
-    onSubmit({
-      title: title.trim(),
-      deadline: deadline || null,
-    })
-    setTitle('')
-    setDeadline('')
+    try {
+      await onSubmit({
+        title: title.trim(),
+        deadline: deadline || null,
+      })
+      setTitle('')
+      setDeadline('')
+    } catch {
+      // App.jsx sets the error message; keep form values so user doesn't lose input
+    }
   }
 
   return (
     <form onSubmit={handleSubmit} className="task-form">
-      <input
-        type="text"
-        placeholder="Task title"
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-      />
+      <label>
+        Task title
+        <input
+          type="text"
+          placeholder="Task title"
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+        />
+      </label>
       <label>
         Deadline
         <input

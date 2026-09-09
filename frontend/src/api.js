@@ -1,14 +1,12 @@
 const BASE = '/api/tasks'
 
 async function parseError(res) {
-  try {
-    const body = await res.json()
-    if (Array.isArray(body.detail)) {
-      // Pydantic validation error — strip the "Value error, " prefix it adds
-      return body.detail[0].msg.replace('Value error, ', '')
-    }
-    if (typeof body.detail === 'string') return body.detail
-  } catch {}
+  const body = await res.json().catch(() => ({}))
+  if (Array.isArray(body.detail)) {
+    // Pydantic validation error — strip the "Value error, " prefix it adds
+    return body.detail[0].msg.replace('Value error, ', '')
+  }
+  if (typeof body.detail === 'string') return body.detail
   return 'Something went wrong'
 }
 

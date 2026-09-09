@@ -5,6 +5,7 @@ function TaskItem({ task, onToggle, onEdit, onDelete }) {
         type="checkbox"
         checked={task.completed}
         onChange={() => onToggle(task)}
+        aria-label={`Mark "${task.title}" as ${task.completed ? 'incomplete' : 'complete'}`}
       />
       <div className="task-content">
         <span className={task.completed ? 'completed' : ''}>{task.title}</span>

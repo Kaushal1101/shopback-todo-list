@@ -22,6 +22,7 @@ function App() {
       setError(null)
     } catch (e) {
       setError(e.message)
+      throw e  // let TaskForm know not to clear on failure
     }
   }
 
@@ -33,6 +34,7 @@ function App() {
       setError(null)
     } catch (e) {
       setError(e.message)
+      throw e  // let TaskForm know not to clear on failure
     }
   }
 
@@ -50,6 +52,7 @@ function App() {
     try {
       await deleteTask(id)
       setTasks(prev => prev.filter(t => t.id !== id))
+      if (editingTask?.id === id) setEditingTask(null)
       setError(null)
     } catch (e) {
       setError(e.message)
@@ -61,6 +64,7 @@ function App() {
       <h1>To-Do List</h1>
 
       <TaskForm
+        key={editingTask?.id ?? 'new'}
         onSubmit={editingTask ? handleUpdate : handleCreate}
         editingTask={editingTask}
         onCancel={() => setEditingTask(null)}
