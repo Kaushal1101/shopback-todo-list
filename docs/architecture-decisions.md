@@ -26,3 +26,18 @@ server: {
   }
 }
 ```
+
+---
+
+## ADR-2: All frontend state lives in App.jsx — no external state library
+
+**Decision:** Keep all React state (`tasks`, `editingTask`, `error`) in `App.jsx` and pass it down as props. No Redux, Zustand, or React Context.
+
+**Context:** Larger React apps typically reach for a state management library when state needs to be shared across many components that aren't in a direct parent-child relationship ("prop drilling"). Common choices are Redux Toolkit, Zustand, or React Context.
+
+**Why we chose centralized local state instead:**
+- The component tree is shallow: `App → TaskList → TaskItem` and `App → TaskForm`. Every component that needs state is at most one level from `App`, so prop drilling is not a problem.
+- Adding a library introduces boilerplate (stores, actions, reducers) that would dwarf the actual business logic in an app this size.
+- All data-fetching and mutation logic living in one file (`App.jsx`) makes the data flow easy to follow end-to-end.
+
+**Trade-off:** If the app grows significantly — more pages, deeper component nesting, or state shared across sibling trees — this approach will become unwieldy and a state library would be the right call.

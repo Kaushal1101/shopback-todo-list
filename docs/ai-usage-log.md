@@ -22,6 +22,11 @@ Tracks how the developer directed Claude during this project — specifically de
 
 ---
 
+- **Frontend test-first** — Directed Claude to write the frontend test suite before any component code was written, consistent with the backend approach.
+- **Error message clarity** — Noticed that submitting a title of only special characters showed a generic "something went wrong" message. Directed Claude to surface the actual backend validation message from FastAPI's response body.
+
+---
+
 ## Delegated to Claude
 
 - File and folder layout within the chosen stack
@@ -31,3 +36,7 @@ Tracks how the developer directed Claude during this project — specifically de
 - Structuring the backend plan (`agent-plans/backend-plan.md`)
 - Writing the test cases for each endpoint
 - Documentation format and structure (CLAUDE.md, architecture-decisions.md, this file)
+- Structuring the frontend plan (`agent-plans/frontend-plan.md`)
+- Writing the frontend test suite (Vitest + React Testing Library)
+- All React component implementation (App.jsx, TaskForm.jsx, TaskList.jsx, TaskItem.jsx, api.js)
+- Identifying and fixing Codex-flagged issues (form clears on error, stale edit form after delete, empty catch block, useEffect for form population, missing aria-label)

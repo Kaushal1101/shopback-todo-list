@@ -53,7 +53,14 @@ Open `http://localhost:5173`. The frontend proxies all API requests to the backe
 
 ### Running Tests
 
+**Backend:**
 ```bash
 cd backend
 pytest test_main.py -v
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm run test
 ```
