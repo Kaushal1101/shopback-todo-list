@@ -63,6 +63,7 @@ function App() {
     <div className="app">
       <h1>To-Do List</h1>
 
+      {/* key change forces a remount when switching tasks, so useState initialises from the new props instead of needing useEffect */}
       <TaskForm
         key={editingTask?.id ?? 'new'}
         onSubmit={editingTask ? handleUpdate : handleCreate}
