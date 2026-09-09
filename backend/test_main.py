@@ -9,20 +9,20 @@ from database import create_tables
 # Each test gets a fresh in-memory SQLite database so tests don't affect each other.
 # Schema is imported from database.py so it stays in sync with production.
 
-def get_test_db():
-    conn = sqlite3.connect(":memory:")
-    conn.row_factory = sqlite3.Row
-    create_tables(conn)
-    try:
-        yield conn
-    finally:
-        conn.close()
-
-
 @pytest.fixture(autouse=True)
 def override_db():
+    # Same reasoning as production: FastAPI runs handlers in a thread pool,
+    # so the connection must be usable across threads.
+    conn = sqlite3.connect(":memory:", check_same_thread=False)
+    conn.row_factory = sqlite3.Row
+    create_tables(conn)
+
+    def get_test_db():
+        yield conn
+
     app.dependency_overrides[get_db] = get_test_db
     yield
+    conn.close()
     app.dependency_overrides.clear()
 
 
